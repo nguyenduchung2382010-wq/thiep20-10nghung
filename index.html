@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Chúc Mừng Ngày Phụ Nữ Việt Nam 20/10 💐</title>
+  
+  <!-- Favicon SVG -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💐</text></svg>">
+  
+  <!-- Google Fonts với font chữ lãng mạn & thanh lịch -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Canvas hiệu ứng cánh hoa rơi nhẹ nhàng trong background -->
+  <canvas id="petals-canvas"></canvas>
+
+  <!-- Màn hình Loading ngắn ban đầu -->
+  <div id="initial-loader" class="loader-overlay">
+    <div class="loader-content">
+      <div class="blooming-rose">
+        <svg viewBox="0 0 100 100" class="rose-icon">
+          <path class="rose-petal p1" d="M50 20 C60 10, 80 25, 70 45 C60 60, 50 65, 50 65 C50 65, 40 60, 30 45 C20 25, 40 10, 50 20 Z" fill="#ff4d6d" />
+          <path class="rose-petal p2" d="M50 28 C65 20, 75 35, 68 50 C60 60, 50 65, 50 65 C50 65, 40 60, 32 50 C25 35, 35 20, 50 28 Z" fill="#ff758f" />
+          <path class="rose-petal p3" d="M50 35 C58 30, 68 40, 60 52 C55 60, 50 65, 50 65 C50 65, 45 60, 40 52 C32 40, 42 30, 50 35 Z" fill="#ffb3c1" />
+          <circle cx="50" cy="46" r="6" fill="#fff0f3" />
+        </svg>
+      </div>
+      <p class="loader-text">made by Nguyễn Hùng + gg antigravity ✨</p>
+    </div>
+  </div>
+
+  <!-- Nút bật/tắt âm thanh hiệu ứng & nhạc -->
+  <button id="sound-toggle" class="sound-toggle-btn" title="Bật/Tắt âm thanh" aria-label="Bật/Tắt âm thanh">
+    <span class="sound-icon">🔔</span>
+    <span class="sound-text">Âm thanh</span>
+  </button>
+
+  <!-- Container chính của ứng dụng 3 trang -->
+  <main class="app-container">
+
+    <!-- ==================== TRANG 1: NHẬP TÊN ==================== -->
+    <section id="screen-1" class="screen screen-1 active">
+      <div class="glass-card card-intro">
+        <div class="gift-badge">
+          <span class="badge-icon">💐</span>
+          <span class="badge-sparkle">✨</span>
+        </div>
+        
+        <h1 class="intro-title">Một món quà nhỏ dành cho mọi người 💐</h1>
+        <p class="intro-subtitle">Gửi gắm yêu thương và những lời chúc tốt đẹp nhất nhân ngày Phụ nữ Việt Nam 20/10</p>
+        
+        <form id="name-form" class="name-form" onsubmit="return false;">
+          <div class="input-wrapper">
+            <span class="input-icon">💌</span>
+            <input 
+              type="text" 
+              id="recipient-name" 
+              class="name-input" 
+              placeholder="Nhập tên người nhận..." 
+              autocomplete="name"
+              maxlength="25"
+            >
+          </div>
+          <div id="name-error" class="error-hint" aria-live="polite"></div>
+
+          <button type="submit" id="btn-open-gift" class="btn-primary">
+            <span>Mở món quà ✨</span>
+            <div class="btn-glow"></div>
+          </button>
+        </form>
+
+        <!-- Gợi ý nhanh tên mẫu -->
+        <!-- <div class="quick-names">
+          <span class="quick-label">Gợi ý nhanh:</span>
+          <div class="quick-tags">
+            <button type="button" class="tag-btn" data-name="Mẹ yêu">Mẹ yêu</button>
+            <button type="button" class="tag-btn" data-name="Em yêu">Em yêu</button>
+            <button type="button" class="tag-btn" data-name="Chị gái">Chị gái</button>
+            <button type="button" class="tag-btn" data-name="Cô gái đáng yêu">Cô gái đáng yêu</button>
+          </div>
+        </div> -->
+      </div>
+    </section>
+
+    <!-- ==================== TRANG 2: ĐÓA HOA & THIỆP ==================== -->
+    <section id="screen-2" class="screen screen-2">
+      <!-- Nút quay lại trang 1 -->
+      <button class="btn-back" id="back-to-screen-1" title="Quay lại">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Quay lại</span>
+      </button>
+
+      <!-- Giai đoạn 2A: Bó hoa với bông hoa có thể rút -->
+      <div id="bouquet-stage" class="bouquet-stage">
+        <div class="pull-hint" id="pull-hint">
+          <div class="hint-hand">👆</div>
+          <div class="hint-bubble">Hãy chọn một bông hoa 🌷</div>
+        </div>
+
+        <div class="bouquet-wrapper" id="bouquet-wrapper">
+          <!-- Bó hoa SVG chi tiết & tinh tế -->
+          <svg viewBox="0 0 400 480" class="bouquet-svg" id="bouquet-svg">
+            <defs>
+              <linearGradient id="wrapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fff5f5" />
+                <stop offset="50%" stop-color="#fed7e2" />
+                <stop offset="100%" stop-color="#fbb6ce" />
+              </linearGradient>
+              <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f6ad55" />
+                <stop offset="100%" stop-color="#dd6b20" />
+              </linearGradient>
+              <linearGradient id="roseRed" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ff758f" />
+                <stop offset="60%" stop-color="#e11d48" />
+                <stop offset="100%" stop-color="#9f1239" />
+              </linearGradient>
+              <linearGradient id="rosePink" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#fff0f3" />
+                <stop offset="60%" stop-color="#ff4d6d" />
+                <stop offset="100%" stop-color="#c9184a" />
+              </linearGradient>
+              <linearGradient id="roseYellow" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#fef08a" />
+                <stop offset="60%" stop-color="#f59e0b" />
+                <stop offset="100%" stop-color="#d97706" />
+              </linearGradient>
+              <linearGradient id="leafGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#86efac" />
+                <stop offset="60%" stop-color="#22c55e" />
+                <stop offset="100%" stop-color="#15803d" />
+              </linearGradient>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#881337" flood-opacity="0.18" />
+              </filter>
+              <filter id="flowerGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff4d6d" flood-opacity="0.5" />
+              </filter>
+            </defs>
+
+            <!-- Lớp giấy gói hoa phía sau -->
+            <path d="M70 280 L200 450 L330 280 L350 200 L200 230 L50 200 Z" fill="url(#wrapGrad)" opacity="0.9" />
+
+            <!-- Các cành & lá xanh -->
+            <g class="bouquet-leaves">
+              <path d="M140 240 Q110 180 120 140 Q150 170 145 220" fill="url(#leafGrad)" />
+              <path d="M260 240 Q290 180 280 140 Q250 170 255 220" fill="url(#leafGrad)" />
+              <path d="M190 230 Q170 150 190 110 Q210 150 200 230" fill="url(#leafGrad)" />
+              <path d="M100 220 Q70 170 85 130 Q115 160 110 210" fill="url(#leafGrad)" />
+              <path d="M300 220 Q330 170 315 130 Q285 160 290 210" fill="url(#leafGrad)" />
+            </g>
+
+            <!-- Các đóa hoa xung quanh bó -->
+            <g class="bouquet-flowers-base">
+              <!-- Bông hồng bên trái -->
+              <g transform="translate(110, 160) scale(0.7)">
+                <circle cx="50" cy="50" r="40" fill="url(#rosePink)" />
+                <path d="M20 50 C20 30 40 20 50 35 C60 20 80 30 80 50 C80 70 50 85 50 85 C50 85 20 70 20 50 Z" fill="#ff758f" />
+                <circle cx="50" cy="46" r="16" fill="#fff0f3" opacity="0.8" />
+              </g>
+
+              <!-- Bông hồng vàng bên phải -->
+              <g transform="translate(240, 165) scale(0.68)">
+                <circle cx="50" cy="50" r="40" fill="url(#roseYellow)" />
+                <path d="M20 50 C20 30 40 20 50 35 C60 20 80 30 80 50 C80 70 50 85 50 85 C50 85 20 70 20 50 Z" fill="#fde047" />
+                <circle cx="50" cy="46" r="16" fill="#fffbeb" opacity="0.9" />
+              </g>
+
+              <!-- Bông hồng đỏ thẫm góc dưới trái -->
+              <g transform="translate(150, 195) scale(0.75)">
+                <circle cx="50" cy="50" r="40" fill="url(#roseRed)" />
+                <path d="M20 50 C20 30 40 20 50 35 C60 20 80 30 80 50 C80 70 50 85 50 85 C50 85 20 70 20 50 Z" fill="#fb7185" />
+                <circle cx="50" cy="46" r="14" fill="#ffe4e6" opacity="0.8" />
+              </g>
+
+              <!-- Bông hồng góc dưới phải -->
+              <g transform="translate(210, 200) scale(0.72)">
+                <circle cx="50" cy="50" r="40" fill="url(#rosePink)" />
+                <path d="M20 50 C20 30 40 20 50 35 C60 20 80 30 80 50 C80 70 50 85 50 85 C50 85 20 70 20 50 Z" fill="#ff4d6d" />
+                <circle cx="50" cy="46" r="14" fill="#fff0f3" opacity="0.85" />
+              </g>
+
+              <!-- Những đốm hoa baby trắng lấp lánh -->
+              <g fill="#ffffff" opacity="0.95">
+                <circle cx="150" cy="140" r="4" /><circle cx="160" cy="135" r="3" /><circle cx="145" cy="148" r="3.5" />
+                <circle cx="250" cy="145" r="4" /><circle cx="260" cy="140" r="3" /><circle cx="245" cy="155" r="3.5" />
+                <circle cx="195" cy="190" r="4.5" /><circle cx="205" cy="185" r="3" />
+              </g>
+            </g>
+
+            <!-- Lớp giấy gói mặt trước & nơ ruy băng -->
+            <path d="M60 240 L190 455 C195 460 205 460 210 455 L340 240 C345 230 330 220 300 230 L200 270 L100 230 C70 220 55 230 60 240 Z" fill="url(#wrapGrad)" filter="url(#softShadow)" />
+            <path d="M120 250 L200 450 L280 250" fill="none" stroke="#fbcfe8" stroke-width="2" stroke-dasharray="4,4" />
+
+            <!-- Chiếc nơ vàng cam sang trọng -->
+            <g transform="translate(200, 360)">
+              <!-- Nơ cánh trái -->
+              <path d="M0 0 C-40 -30 -60 10 0 10" fill="url(#ribbonGrad)" />
+              <!-- Nơ cánh phải -->
+              <path d="M0 0 C40 -30 60 10 0 10" fill="url(#ribbonGrad)" />
+              <!-- Dải nơ rủ xuống -->
+              <path d="M-6 8 Q-25 40 -35 70 Q-15 50 0 15" fill="url(#ribbonGrad)" />
+              <path d="M6 8 Q25 40 35 70 Q15 50 0 15" fill="url(#ribbonGrad)" />
+              <!-- Nút thắt nơ -->
+              <ellipse cx="0" cy="5" rx="10" ry="8" fill="#c05621" />
+              <circle cx="0" cy="5" r="7" fill="#f6ad55" />
+            </g>
+          </svg>
+
+          <!-- BÔNG HOA NỔI BẬT ĐƯỢC RÚT RA (Tương tác Kéo / Click) -->
+          <div class="pullable-flower-container" id="pullable-flower-container">
+            <div class="flower-glow-aura"></div>
+            
+            <div class="pullable-flower" id="pullable-flower" role="button" tabindex="0" aria-label="Bấm hoặc kéo để rút hoa">
+              <!-- Nhãn mời gọi gắn trên hoa -->
+              <div class="flower-callout">
+                <span class="callout-sparkle">✨</span>
+                <span>Rút hoa ngay</span>
+              </div>
+
+              <!-- Cành hoa -->
+              <div class="flower-stem"></div>
+              <div class="flower-leaf leaf-l"></div>
+              <div class="flower-leaf leaf-r"></div>
+
+              <!-- Đóa hoa Tulip / Rose rạng rỡ -->
+              <div class="flower-blossom">
+                <div class="petal petal-back"></div>
+                <div class="petal petal-left"></div>
+                <div class="petal petal-right"></div>
+                <div class="petal petal-center"></div>
+                <div class="flower-core"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="pull-instruction-text">
+          Chạm hoặc kéo bông hoa lên để mở chiếc thiệp bí mật 💌
+        </p>
+      </div>
+
+      <!-- Giai đoạn 2B: Tấm thiệp thư xuất hiện sau khi rút hoa -->
+      <div id="card-stage" class="card-stage hidden">
+        <!-- Phong thư 3D mở ra -->
+        <div class="envelope-wrapper" id="envelope-wrapper">
+          <div class="envelope" id="envelope">
+            <div class="envelope-flap" id="envelope-flap"></div>
+            <div class="envelope-pocket"></div>
+            
+            <!-- Tờ thiệp chúc mừng bên trong phong thư trượt lên -->
+            <div class="greeting-letter" id="greeting-letter">
+              <div class="card-border-ornament">
+                <div class="corner corner-tl"></div>
+                <div class="corner corner-tr"></div>
+                <div class="corner corner-bl"></div>
+                <div class="corner corner-br"></div>
+              </div>
+
+              <div class="letter-inner">
+                <div class="letter-stamp">
+                  <span>20·10</span>
+                </div>
+
+                <div class="letter-header">
+                  <div class="flower-header-icon">🌸 💐 🌸</div>
+                  <h2 class="letter-main-title">Chúc mừng ngày Phụ nữ Việt Nam 20/10 💐</h2>
+                </div>
+
+                <div class="letter-salutation" id="letter-salutation">
+                  Gửi <span class="recipient-highlight" id="recipient-name-display">Bạn</span> thân mến,
+                </div>
+
+                <div class="letter-body">
+                  <p class="stagger-line line-1">Nhân ngày đặc biệt này, chúc tất cả mọi người luôn xinh đẹp,
+        vui vẻ, hạnh phúc và gặp thật nhiều điều tốt đẹp trong cuộc sống.
+        Mong rằng mỗi ngày đều là một ngày đáng nhớ, luôn có những người
+        chân thành bên cạnh, có đủ dũng khí để vượt qua khó khăn và có
+        thật nhiều lý do để mỉm cười.</p>
+                  <p class="stagger-line line-2">Chúc mọi người không chỉ được yêu thương trong ngày hôm nay,
+        mà còn được trân trọng trong tất cả những ngày bình thường khác.
+        Mong những điều tử tế sẽ luôn tìm đến, những nỗ lực đều được
+        đền đáp xứng đáng và những ước mơ rồi sẽ có ngày trở thành hiện thực.</p>
+                  <p class="stagger-line line-3">💐 Chúc mọi người một ngày 20/10 thật ý nghĩa, luôn bình an,
+        rạng rỡ và hạnh phúc theo cách riêng của mình. ❤️</p>
+                  
+                </div>
+
+                <div class="letter-footer">
+                  <p class="wish-heart">Thư của chung ❤️</p>
+                  <div class="letter-signature">
+                    <span>From with love</span>
+                    <span class="heart-pulse">💖</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Các nút hành động sau khi đọc thiệp -->
+        <div class="card-actions" id="card-actions">
+          <button id="btn-go-to-video" class="btn-primary btn-next-video">
+            <span>Xem lời chúc đặc biệt 🎥</span>
+            <span class="btn-shine"></span>
+          </button>
+          <button id="btn-replay-flower" class="btn-secondary" title="Xem lại đóa hoa">
+            <span>🌸 Cắm hoa lại</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TRANG 3: VIDEO CHÚC MỪNG ==================== -->
+    <section id="screen-3" class="screen screen-3">
+      <!-- Nút quay lại trang 2 -->
+      <button class="btn-back" id="back-to-screen-2" title="Quay lại đọc thiệp">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Đọc lại thiệp</span>
+      </button>
+
+      <div class="video-container-card glass-card">
+        <!-- Tiêu đề trên video -->
+        <div class="video-header">
+          <span class="video-badge">🎬 Special Video Message</span>
+          <h2 class="video-title">
+            Một lời chúc dành riêng cho <span class="recipient-video-name" id="video-name-display">Bạn</span>
+          </h2>
+          <p class="video-subtitle">Hãy bật âm lượng  ✨</p>
+        </div>
+
+        <!-- Khung Video lớn ở trung tâm -->
+        <div class="video-frame" id="video-frame">
+          <!-- Video element -->
+          <video 
+            id="greeting-video" 
+            class="main-video" 
+            playsinline 
+            preload="metadata"
+          >
+            <!-- Không cần file video ngoài: phần trình chiếu được vẽ trực tiếp bằng JavaScript Canvas. -->
+            <source src="video.mp4" type="video/mp4">
+            Trình duyệt của bạn không hỗ trợ phát video thẻ HTML5.
+          </video>
+
+          <!-- Canvas mô phỏng video demo khi người dùng chưa có file video.mp4 -->
+          <canvas id="demo-video-canvas" class="demo-video-canvas hidden"></canvas>
+
+          <!-- Hoạt hình video được tạo trực tiếp bằng Canvas, không cần tải video riêng. -->
+          <div id="video-placeholder" class="video-placeholder">
+            <div class="placeholder-icon-wrap">
+              <span class="film-icon">🎥</span>
+              <span class="placeholder-heart">❤️</span>
+            </div>
+            <h3 class="placeholder-title">Đang chuẩn bị lời chúc dành riêng cho bạn… ❤️</h3>
+            <p class="placeholder-text">Hoa nở, ánh sáng và lời chúc được tạo trực tiếp bằng code — không cần file video riêng.</p>
+          </div>
+
+          <!-- Nút Play/Pause lớn trên khung video -->
+          <button id="center-play-btn" class="center-play-btn hidden" aria-label="Phát hoặc tạm dừng video">
+            <span class="play-icon">▶</span>
+          </button>
+
+          <!-- Thanh điều khiển Video tùy chỉnh (Custom Video Controls) -->
+          <div class="custom-video-controls" id="custom-video-controls">
+            <div class="progress-bar-container" id="video-progress-container">
+              <div class="progress-bar-fill" id="video-progress-fill"></div>
+              <div class="progress-bar-thumb"></div>
+            </div>
+
+            <div class="controls-row">
+              <div class="controls-left">
+                <button id="ctrl-play-btn" class="ctrl-btn" title="Phát/Dừng">▶</button>
+                <div class="time-display" id="video-time-display">00:00 / 00:00</div>
+              </div>
+
+              <div class="controls-right">
+                <button id="ctrl-mute-btn" class="ctrl-btn" title="Bật/Tắt tiếng">🔊</button>
+                <button id="ctrl-fullscreen-btn" class="ctrl-btn" title="Toàn màn hình">⛶</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thông điệp chúc mừng khi video kết thúc -->
+          <div id="video-end-screen" class="video-end-screen hidden">
+            <div class="end-celebration-box">
+              <div class="end-icon">🎉 💐 💖</div>
+              <h3 class="end-message" id="video-end-text">
+                Chúc <span id="end-name-display">Bạn</span> một ngày 20/10 thật vui vẻ và hạnh phúc! ❤️
+              </h3>
+              <p class="end-sub">Cảm ơn vì sự hiện diện tuyệt vời của bạn trong cuộc sống này.</p>
+              
+              <div class="end-btn-group">
+                <button id="btn-replay-video" class="btn-primary">
+                  <span>Xem lại video 🔄</span>
+                </button>
+                <button id="btn-back-home" class="btn-secondary">
+                  <span>Trang đầu 🏠</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nút quay về đầu trang -->
+        <div class="video-bottom-nav">
+          <button id="btn-go-vote" class="btn-primary vote-next-button"><span>Tiếp tục đến câu hỏi cuối 💗</span></button>
+          <button id="btn-restart" class="btn-text-link">
+            <span>✨ Gửi lời chúc đến một người khác</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TRANG 4: BÌNH CHỌN ==================== -->
+    <section id="screen-4" class="screen screen-4">
+      <button class="btn-back" id="back-to-screen-3" title="Quay lại video">
+        <span aria-hidden="true">←</span><span>Quay lại video</span>
+      </button>
+      <div class="vote-card glass-card">
+        <div class="vote-kicker">💌 MỘT CÂU HỎI NHỎ</div>
+        <div class="vote-big-heart" aria-hidden="true">♡</div>
+        <h2 class="vote-title" id="vote-title">Bạn có thích tấm thiệp này không?</h2>
+        <p class="vote-subtitle" id="vote-subtitle">Thành thật nhaaa, người làm thiệp đang hồi hộp lắm đó 💗</p>
+        <div class="vote-buttons" id="vote-buttons">
+          <button type="button" class="vote-yes" id="vote-yes">Có chứ! 💗</button>
+          <button type="button" class="vote-no" id="vote-no">Không 😝</button>
+        </div>
+        <p class="vote-hint" id="vote-hint">Thử bấm “Không” xem chuyện gì xảy ra nè =)))</p>
+        <button type="button" class="vote-restart" id="vote-restart">Tạo thiệp cho người khác ↻</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Progress Indicator ở dưới cùng (1/4, 2/4, 3/4, 4/4) -->
+  <footer class="progress-footer">
+    <div class="step-indicator" id="step-indicator">
+      <div class="step-item step-1 active" data-step="1">
+        <span class="step-dot">1</span>
+        <span class="step-label">Mở quà</span>
+      </div>
+      <div class="step-line line-1-2"></div>
+      <div class="step-item step-2" data-step="2">
+        <span class="step-dot">2</span>
+        <span class="step-label">Đóa hoa</span>
+      </div>
+      <div class="step-line line-2-3"></div>
+      <div class="step-item step-3" data-step="3">
+        <span class="step-dot">3</span>
+        <span class="step-label">Lời chúc</span>
+      </div>
+      <div class="step-line line-3-4"></div>
+      <div class="step-item step-4" data-step="4">
+        <span class="step-dot">4</span>
+        <span class="step-label">Bình chọn</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
